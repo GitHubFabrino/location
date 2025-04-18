@@ -4,6 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Géolocalisation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        #getLocationButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        #getLocationButton:hover {
+            background-color: #0056b3;
+        }
+        #locationInfo {
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #errorMessage {
+            margin-top: 20px;
+        }
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
     <h1>Géolocalisation</h1>
@@ -13,9 +60,16 @@
         <p>Longitude: <span id="longitude"></span></p>
     </div>
     <div id="errorMessage" style="color: red;"></div>
+    <div id="map"></div>
 
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         document.getElementById('getLocationButton').addEventListener('click', getLocation);
+
+        const map = L.map('map').setView([0, 0], 2); // Initial view centered on the world
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
         function getLocation() {
             const latitudeElement = document.getElementById('latitude');
@@ -30,8 +84,16 @@
                     if (result.state === 'granted') {
                         navigator.geolocation.getCurrentPosition(
                             (position) => {
-                                latitudeElement.textContent = position.coords.latitude;
-                                longitudeElement.textContent = position.coords.longitude;
+                                const latitude = position.coords.latitude;
+                                const longitude = position.coords.longitude;
+                                latitudeElement.textContent = latitude;
+                                longitudeElement.textContent = longitude;
+
+                                // Center the map on the obtained coordinates
+                                map.setView([latitude, longitude], 13);
+                                L.marker([latitude, longitude]).addTo(map)
+                                    .bindPopup(`<b>Votre position</b><br>Latitude: ${latitude}<br>Longitude: ${longitude}`)
+                                    .openPopup();
                             },
                             (error) => {
                                 console.error(error.message);
@@ -54,8 +116,16 @@
                     } else if (result.state === 'prompt') {
                         navigator.geolocation.getCurrentPosition(
                             (position) => {
-                                latitudeElement.textContent = position.coords.latitude;
-                                longitudeElement.textContent = position.coords.longitude;
+                                const latitude = position.coords.latitude;
+                                const longitude = position.coords.longitude;
+                                latitudeElement.textContent = latitude;
+                                longitudeElement.textContent = longitude;
+
+                                // Center the map on the obtained coordinates
+                                map.setView([latitude, longitude], 13);
+                                L.marker([latitude, longitude]).addTo(map)
+                                    .bindPopup(`<b>Votre position</b><br>Latitude: ${latitude}<br>Longitude: ${longitude}`)
+                                    .openPopup();
                             },
                             (error) => {
                                 console.error(error.message);
@@ -82,8 +152,16 @@
             } else {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        latitudeElement.textContent = position.coords.latitude;
-                        longitudeElement.textContent = position.coords.longitude;
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        latitudeElement.textContent = latitude;
+                        longitudeElement.textContent = longitude;
+
+                        // Center the map on the obtained coordinates
+                        map.setView([latitude, longitude], 13);
+                        L.marker([latitude, longitude]).addTo(map)
+                            .bindPopup(`<b>Votre position</b><br>Latitude: ${latitude}<br>Longitude: ${longitude}`)
+                            .openPopup();
                     },
                     (error) => {
                         console.error(error.message);
