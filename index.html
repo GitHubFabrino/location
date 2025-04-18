@@ -49,6 +49,13 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        #deviceInfo {
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
@@ -61,6 +68,9 @@
     </div>
     <div id="errorMessage" style="color: red;"></div>
     <div id="map"></div>
+    <div id="deviceInfo">
+        <p>Type de dispositif: <span id="deviceType"></span></p>
+    </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
@@ -88,6 +98,9 @@
                                 const longitude = position.coords.longitude;
                                 latitudeElement.textContent = latitude;
                                 longitudeElement.textContent = longitude;
+
+                                // Log the coordinates
+                                console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
 
                                 // Center the map on the obtained coordinates
                                 map.setView([latitude, longitude], 13);
@@ -120,6 +133,9 @@
                                 const longitude = position.coords.longitude;
                                 latitudeElement.textContent = latitude;
                                 longitudeElement.textContent = longitude;
+
+                                // Log the coordinates
+                                console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
 
                                 // Center the map on the obtained coordinates
                                 map.setView([latitude, longitude], 13);
@@ -157,6 +173,9 @@
                         latitudeElement.textContent = latitude;
                         longitudeElement.textContent = longitude;
 
+                        // Log the coordinates
+                        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
                         // Center the map on the obtained coordinates
                         map.setView([latitude, longitude], 13);
                         L.marker([latitude, longitude]).addTo(map)
@@ -183,6 +202,20 @@
                 );
             }
         }
+
+        function detectDeviceType() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const deviceTypeElement = document.getElementById('deviceType');
+
+            if (/android|iphone|kindle|ipad|mobile/i.test(userAgent)) {
+                deviceTypeElement.textContent = 'Téléphone';
+            } else {
+                deviceTypeElement.textContent = 'PC';
+            }
+        }
+
+        // Appel de la fonction pour détecter le type de dispositif au chargement de la page
+        window.addEventListener('load', detectDeviceType);
     </script>
 </body>
 </html>
