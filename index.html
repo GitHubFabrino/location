@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Géolocalisation</title>
+</head>
+<body>
+    <h1>Géolocalisation</h1>
+    <button id="getLocationButton">Obtenir la position</button>
+    <div id="locationInfo">
+        <p>Latitude: <span id="latitude"></span></p>
+        <p>Longitude: <span id="longitude"></span></p>
+    </div>
+    <div id="errorMessage" style="color: red;"></div>
+
+    <script>
+        document.getElementById('getLocationButton').addEventListener('click', getLocation);
+
+        function getLocation() {
+            const latitudeElement = document.getElementById('latitude');
+            const longitudeElement = document.getElementById('longitude');
+            const errorMessageElement = document.getElementById('errorMessage');
+
+            // Réinitialiser les messages d'erreur
+            errorMessageElement.textContent = '';
+
+            if (navigator.permissions) {
+                navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+                    if (result.state === 'granted') {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                latitudeElement.textContent = position.coords.latitude;
+                                longitudeElement.textContent = position.coords.longitude;
+                            },
+                            (error) => {
+                                console.error(error.message);
+                                switch (error.code) {
+                                    case error.PERMISSION_DENIED:
+                                        errorMessageElement.textContent = 'L\'utilisateur a refusé la demande de géolocalisation.';
+                                        break;
+                                    case error.POSITION_UNAVAILABLE:
+                                        errorMessageElement.textContent = 'Les informations de géolocalisation ne sont pas disponibles.';
+                                        break;
+                                    case error.TIMEOUT:
+                                        errorMessageElement.textContent = 'La demande de géolocalisation a expiré.';
+                                        break;
+                                    case error.UNKNOWN_ERROR:
+                                        errorMessageElement.textContent = 'Une erreur inconnue s\'est produite.';
+                                        break;
+                                }
+                            }
+                        );
+                    } else if (result.state === 'prompt') {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                latitudeElement.textContent = position.coords.latitude;
+                                longitudeElement.textContent = position.coords.longitude;
+                            },
+                            (error) => {
+                                console.error(error.message);
+                                switch (error.code) {
+                                    case error.PERMISSION_DENIED:
+                                        errorMessageElement.textContent = 'L\'utilisateur a refusé la demande de géolocalisation.';
+                                        break;
+                                    case error.POSITION_UNAVAILABLE:
+                                        errorMessageElement.textContent = 'Les informations de géolocalisation ne sont pas disponibles.';
+                                        break;
+                                    case error.TIMEOUT:
+                                        errorMessageElement.textContent = 'La demande de géolocalisation a expiré.';
+                                        break;
+                                    case error.UNKNOWN_ERROR:
+                                        errorMessageElement.textContent = 'Une erreur inconnue s\'est produite.';
+                                        break;
+                                }
+                            }
+                        );
+                    } else {
+                        errorMessageElement.textContent = 'La permission de géolocalisation a été refusée.';
+                    }
+                });
+            } else {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        latitudeElement.textContent = position.coords.latitude;
+                        longitudeElement.textContent = position.coords.longitude;
+                    },
+                    (error) => {
+                        console.error(error.message);
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessageElement.textContent = 'L\'utilisateur a refusé la demande de géolocalisation.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessageElement.textContent = 'Les informations de géolocalisation ne sont pas disponibles.';
+                                break;
+                            case error.TIMEOUT:
+                                errorMessageElement.textContent = 'La demande de géolocalisation a expiré.';
+                                break;
+                            case error.UNKNOWN_ERROR:
+                                errorMessageElement.textContent = 'Une erreur inconnue s\'est produite.';
+                                break;
+                        }
+                    }
+                );
+            }
+        }
+    </script>
+</body>
+</html>
